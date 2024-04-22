@@ -1,0 +1,50 @@
+def fibonacci(n):
+    if n <= 0:
+        return "Invalid input. Please provide a positive integer."
+    elif n == 1:
+        return 0
+    elif n == 2:
+        return 1
+    else:
+        a, b = 0, 1
+        for _ in range(3, n+1):
+            a, b = b, a + b
+        return b
+
+def coordinates_fibonacci(n):
+    if n <= 0:
+        return "Invalid input. Please provide a positive integer."
+    elif n == 1:
+        return (0, 0)
+    elif n == 2:
+        return (1, 1)
+    else:
+        fib_sequence = [(0, 0), (1, 1)]
+        for i in range(2, n):
+            if (i+1) % 4 == 0:
+                fib_sequence.append((fib_sequence[i-1][0]-(fibonacci((i+1))), fib_sequence[i-1][1]-(fibonacci((i+1)))))
+            elif (i+1) % 4 == 1:
+                fib_sequence.append((fib_sequence[i-1][0]-(fibonacci((i+1))), fib_sequence[i-1][1]+(fibonacci((i+1)))))
+            elif (i+1) % 4 == 2:
+                fib_sequence.append((fib_sequence[i-1][0]+(fibonacci((i+1))), fib_sequence[i-1][1]+(fibonacci((i+1)))))
+            else:
+                fib_sequence.append((fib_sequence[i-1][0]+(fibonacci((i+1))), fib_sequence[i-1][1]-(fibonacci((i+1)))))
+        return fib_sequence[-1]
+
+    
+n = int(input("Enter the value of n: "))
+fibonacci_coordinates = [coordinates_fibonacci(i) for i in range(1, n+1)]
+print(f"The coordinates of the Fibonacci sequence up to position {n} are: {fibonacci_coordinates}")
+
+import matplotlib.pyplot as plt
+from scipy.spatial import Voronoi, voronoi_plot_2d
+
+# Define your points here. For example:
+points = fibonacci_coordinates  # Use the fibonacci_coordinates from your previous code
+
+# Compute Voronoi
+vor = Voronoi(points)
+
+# Plot
+voronoi_plot_2d(vor)
+plt.show()
